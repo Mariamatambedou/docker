@@ -1,0 +1,64 @@
+pipeline {
+    environment {
+        imagename = "tambedou/demo-enset-student"
+        registryCredential = 'Dockerhub'
+        dockerImage = ''
+        sonarqubeServerUrl = 'https://7c80-41-82-214-76.ngrok-free.app'  // URL ngrok vers SonarQube
+        sonarToken = credentials('sonar-token')  // Token SonarQube sécurisé dans Jenkins
+    }
+    agent any
+    stages {
+        stage('Cloning Git') {
+            steps {
+                git([url: 'https://github.com/Mariamatambedou/docker.git', branch: 'main', credentialsId: 'Github'])
+            }
+        }
+        stage('SonarQube Scan') {
+            steps {
+                script {
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                        sonar-scanner \
+                        -Dsonar.projectKey=docker \   # Utiliser le projectKey que tu as défini
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=${sonarqubeServerUrl} \
+                        -Dsonar.login=${sonarToken}
+                        """
+                    }
+                }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                script {
+                    timeout(time: 5, unit: 'MINUTES') {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
+            }
+        }
+        stage('Building image') {
+            steps {
+                script {
+                    dockerImage = docker.build(imagename, ".")
+                }
+            }
+        }
+        stage('Deploy Image') {
+            steps {
+                script {
+                    docker.withRegistry('', registryCredential) {
+                        dockerImage.push("$BUILD_NUMBER")
+                        dockerImage.push('latest')
+                    }
+                }
+            }
+        }
+        stage('Remove Unused docker image') {
+            steps {
+                sh "docker rmi $imagename:$BUILD_NUMBER"
+                sh "docker rmi $imagename:latest"
+            }
+        }
+    }
+}

@@ -21,7 +21,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/basestudent
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD:
+      SPRING_DATASOURCE_PASSWORD: root
     depends_on:
       - mysql
     volumes:
@@ -32,7 +32,7 @@ services:
       context: ./frontend-angular
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - "88:80"
     depends_on:
       - backend
 
