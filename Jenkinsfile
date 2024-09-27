@@ -19,16 +19,18 @@ pipeline {
                     withSonarQubeEnv('SonarQube') {
                         sh """
                         export PATH=$PATH:/opt/sonar-scanner/bin
-                         sonar-scanner
-                        -Dsonar.projectKey=my_sonar_key
-                        -Dsonar.sources=.
-                        -Dsonar.host.url=${sonarqubeServerUrl}
-                        -Dsonar.login=${sonarToken}
+                        sonar-scanner \
+                            -Dsonar.projectKey=my_sonar_key \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=${sonarqubeServerUrl} \
+                            -Dsonar.login=${sonarToken} \
+                            -Dsonar.java.jdkHome=/usr/lib/jvm/java-17-openjdk-amd64  # Spécifiez le chemin de Java 17 si nécessaire
                         """
                     }
                 }
             }
         }
+
         stage('Quality Gate') {
             steps {
                 script {
