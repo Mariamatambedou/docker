@@ -18,7 +18,8 @@ pipeline {
                 script {
                     withSonarQubeEnv('SonarQube') {
                         sh """
-                        sonar-scanner
+                        export PATH=$PATH:/opt/sonar-scanner/bin
+                         sonar-scanner
                         -Dsonar.projectKey=docker
                         -Dsonar.sources=.
                         -Dsonar.host.url=${sonarqubeServerUrl}
