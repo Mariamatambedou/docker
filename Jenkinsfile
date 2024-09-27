@@ -19,6 +19,7 @@ pipeline {
                     withSonarQubeEnv('SonarQube') {
                         sh """
                         export PATH=$PATH:/opt/sonar-scanner/bin
+                        mvn clean compile
                         sonar-scanner \
                             -Dsonar.projectKey=my_sonar_key \
                             -Dsonar.sources=. \
