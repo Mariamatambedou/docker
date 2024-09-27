@@ -3,8 +3,8 @@ pipeline {
         imagename = "tambedou/demo-enset-student"
         registryCredential = 'Dockerhub'
         dockerImage = ''
-        sonarqubeServerUrl = 'https://7c80-41-82-214-76.ngrok-free.app'  // URL ngrok vers SonarQube
-        sonarToken = credentials('sonar-token')  // Token SonarQube sécurisé dans Jenkins
+        sonarqubeServerUrl = 'https://7c80-41-82-214-76.ngrok-free.app'
+        sonarToken = credentials('sonar-token')
     }
     agent any
     stages {
@@ -18,10 +18,10 @@ pipeline {
                 script {
                     withSonarQubeEnv('SonarQube') {
                         sh """
-                        sonar-scanner \
-                        -Dsonar.projectKey=docker \   # Utiliser le projectKey que tu as défini
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=${sonarqubeServerUrl} \
+                        sonar-scanner
+                        -Dsonar.projectKey=docker
+                        -Dsonar.sources=.
+                        -Dsonar.host.url=${sonarqubeServerUrl}
                         -Dsonar.login=${sonarToken}
                         """
                     }
