@@ -20,7 +20,7 @@ pipeline {
                         sh """
                         export PATH=$PATH:/opt/sonar-scanner/bin
                          sonar-scanner
-                        -Dsonar.projectKey=docker
+                        -Dsonar.projectKey=my_sonar_key
                         -Dsonar.sources=.
                         -Dsonar.host.url=${sonarqubeServerUrl}
                         -Dsonar.login=${sonarToken}
