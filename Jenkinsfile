@@ -3,7 +3,7 @@ pipeline {
         imagename = "tambedou/demo-enset-student"
         registryCredential = 'Dockerhub'
         dockerImage = ''
-        sonarqubeServerUrl = ' https://4b63-196-207-231-216.ngrok-free.app'
+        sonarqubeServerUrl = 'https://4b63-196-207-231-216.ngrok-free.app'
         sonarToken = credentials('sonar-token')
     }
     agent any
